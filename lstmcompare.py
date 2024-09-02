@@ -161,7 +161,7 @@ def main():
 
     if data_source == "Upload file":
         file = st.file_uploader("Unggah file dataset (CSV atau Excel)", type=['csv', 'xlsx'])
-        st.markdown("<p style='color:red;'>catatan: pastikan data dalam int atau float dan tidak ada missing value</p>".lower(), unsafe_allow_html=True)
+        st.markdown("<p style='color:blue;'>catatan: Pastikan data dalam bentuk integer atau float dan tidak ada missing value</p>".lower(), unsafe_allow_html=True)
         if file is not None:
             df = load_data(file)
             if df is not None:
