@@ -155,12 +155,12 @@ def predict_future(model, last_data, days_ahead, scaler):
 
 # Fungsi utama Streamlit
 def main():
-    st.title("Time Series Forecasting dengan LSTM/GRU")
+    st.title("Time Series Forecasting menggunakan LSTM/GRU")
 
     data_source = st.radio("Pilih sumber data:", ("Upload file", "Yahoo Finance"))
 
     if data_source == "Upload file":
-        file = st.file_uploader("Unggah file dataset (CSV atau Excel)", type=['csv', 'xlsx'])
+        file = st.file_uploader("Unggah file dataset (CSV atau Excel)/n Catatan: Pastikan Data dalam Int atau Float dan Tidak ada Missing Value", type=['csv', 'xlsx'])
         if file is not None:
             df = load_data(file)
             if df is not None:
