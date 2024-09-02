@@ -232,5 +232,13 @@ def main():
                 fig.add_trace(go.Scatter(x=future_dates, y=predictions.flatten(), mode='lines',line=dict(color='red') ,name='Prediksi Masa Depan'))
                 st.plotly_chart(fig)
 
+                # Menampilkan hasil prediksi dalam bentuk tabel
+                st.subheader("Tabel Hasil Peramalan")
+                pred_df = pd.DataFrame({
+                    'Tanggal': future_dates,
+                    'Hasil Peralaman': predictions.flatten()
+                })
+                st.write(pred_df)
+
 if __name__ == "__main__":
     main()
