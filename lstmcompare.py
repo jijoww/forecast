@@ -168,6 +168,7 @@ def main():
                 st.session_state['df'] = df
     elif data_source == "Yahoo Finance":
         stock_symbol = st.text_input("Masukkan simbol saham (misalnya AAPL):")
+        st.markdown("<p style='color:blue;'>Catatan: Pastikan ticker atau simbol data benar!</p>", unsafe_allow_html=True)
         start_date = st.date_input("Pilih tanggal mulai:", value=pd.to_datetime('2020-01-01'))
         end_date = st.date_input("Pilih tanggal akhir:", value=pd.to_datetime('today'))
         if st.button("Ambil Data"):
