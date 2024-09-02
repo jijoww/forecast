@@ -60,6 +60,12 @@ def mean_absolute_percentage_error(y_true, y_pred):
 def root_mean_square_error(y_true, y_pred):
     return torch.sqrt(torch.mean((y_true - y_pred) ** 2))
 
+# Fungsi untuk menghitung RMSE pada skala asli
+def root_mean_square_error_original(y_true, y_pred, scaler):
+    y_true_original = scaler.inverse_transform(y_true.reshape(-1, 1))
+    y_pred_original = scaler.inverse_transform(y_pred.reshape(-1, 1))
+    return np.sqrt(np.mean((y_true_original - y_pred_original) ** 2))
+
 # Load dataset
 def load_data(file, stock_symbol=None, start_date=None, end_date=None):
     if stock_symbol:
@@ -189,7 +195,7 @@ def main():
             hidden_layer_size = st.slider("Ukuran Hidden Layer:", 10, 100, 64)
             epochs = st.slider("Jumlah epoch:", 10, 500, 50)
             batch_size = st.slider("Ukuran batch:", 8, 128, 32)
-            learning_rate = st.slider("Learning Rate:", 0.0001, 0.01, 0.001, step=0.0001)
+            learning_rate = st.slider("Learning Rate:", 0.001, 0.01, 0.001, step=0.0001)
             dropout = st.slider("Dropout:", 0.0, 0.5, 0.2)
             days_ahead = st.slider("Berapa hari ke depan yang ingin diramalkan?", 1, 30, 7)
 
@@ -218,18 +224,23 @@ def main():
 
                 fig = go.Figure()
                 fig.add_trace(go.Scatter(x=df.index[-len(y_train):], y=y_train_actual.flatten(), mode='lines', name='Data Aktual'))
-                fig.add_trace(go.Scatter(x=df.index[-len(y_train):], y=y_pred_train.flatten(), mode='lines', name='Prediksi',line=dict(color='red')))
+                fig.add_trace(go.Scatter(x=df.index[-len(y_train):], y=y_pred_train.flatten(), mode='lines', name='Data Latih', line=dict(color='red')))
                 st.plotly_chart(fig)
+
+                # Menghitung RMSE pada skala asli
+                rmse_original = root_mean_square_error_original(y_train.numpy(), y_pred_train, scaler)
+                st.subheader(f"RMSE pada skala asli: {rmse_original:.4f}")
 
                 # Peramalan beberapa hari ke depan
                 st.subheader(f"Prediksi {days_ahead} hari ke depan")
                 last_data = X_train[-1].clone().detach()  # Mengambil data terakhir dari data latih
                 predictions = predict_future(model, last_data, days_ahead, scaler)
-                future_dates = pd.date_range(last_date, periods=days_ahead + 1)
+                future_dates = pd.date_range(last_date + pd.DateOffset(1), periods=days_ahead)
+
 
                 fig = go.Figure()
                 fig.add_trace(go.Scatter(x=df.index, y=df[feature], mode='lines', name='Data Historis'))
-                fig.add_trace(go.Scatter(x=future_dates, y=predictions.flatten(), mode='lines',line=dict(color='red') ,name='Prediksi Masa Depan'))
+                fig.add_trace(go.Scatter(x=future_dates, y=predictions.flatten(), mode='lines', line=dict(color='red'), name='Prediksi Masa Depan'))
                 st.plotly_chart(fig)
 
                 # Menampilkan hasil prediksi dalam bentuk tabel
