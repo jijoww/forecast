@@ -226,7 +226,7 @@ def main():
 
                 fig = go.Figure()
                 fig.add_trace(go.Scatter(x=df.index[-len(y_train):], y=y_train_actual.flatten(), mode='lines', name='Data Aktual'))
-                fig.add_trace(go.Scatter(x=df.index[-len(y_train):], y=y_pred_train.flatten(), mode='lines', name='Data Latih', line=dict(color='red')))
+                fig.add_trace(go.Scatter(x=df.index[-len(y_train):], y=y_pred_train.flatten(), mode='lines', name='Hasil Pembelajaran Model', line=dict(color='red')))
                 st.plotly_chart(fig)
 
                 # Menghitung RMSE pada skala asli
