@@ -230,8 +230,8 @@ def main():
                 st.plotly_chart(fig)
 
                 # Menghitung RMSE pada skala asli
-                rmse_original = root_mean_square_error_original(y_train.numpy(), y_pred_train, scaler)
-                st.subheader(f"RMSE pada skala asli: {rmse_original:.4f}")
+                #rmse_original = root_mean_square_error_original(y_train.numpy(), y_pred_train, scaler)
+                #st.subheader(f"RMSE pada skala asli: {rmse_original:.4f}")
 
                 # Peramalan beberapa hari ke depan
                 st.subheader(f"Prediksi {days_ahead} hari ke depan")
